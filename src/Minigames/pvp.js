@@ -133,7 +133,7 @@ function bar(v, max, w) {
     return str
 }
 class PvPGame {
-    help = ""
+    static help = "no"
     /**
      * @type {Player[]}
      */
@@ -318,8 +318,8 @@ PvP = new MPGame((message) => {
     return PvP.hosts[message.author.id]
 })
 
-const BOT_TEST = true
-Commands.pvp = new Command(PvP.help, async(message, args) => {
+const BOT_TEST = false
+Commands.pvp = new Command(PvPGame.help, async(message, args) => {
     args[0] = args[0].toLowerCase()
     try {
         switch (args[0]) {
@@ -364,12 +364,13 @@ Commands.pvp = new Command(PvP.help, async(message, args) => {
             //    break
             //}
             default: {
-                message.channel.send(PvP.help.replace(/\&/g, Prefix.get(message.guild.id)))
+                message.channel.send(PvPGame.help.replace(/\&/g, Prefix.get(message.guild.id)))
                 return
             }
         }
     } catch (er) {
-        console.error(er)
-        message.reply(`no`)
+        if (typeof er == "string") {
+            message.reply(`${er}`)
+        } else message.reply(`Something went wrong`)
     }
-}, "Game", [new RequiredArg(0, PvP.help, "command"), new RequiredArg(1, undefined, "@user", true)], "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+}, "Game", [new RequiredArg(0, PvPGame.help, "command"), new RequiredArg(1, undefined, "@user", true)], "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
